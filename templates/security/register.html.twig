@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div id="login-page">
+		<div class="container">
+        {{ form_start(registrationForm,{ 'attr': {'class': 'form-login'} }) }}
+				<h2 class="form-login-heading">sign in now</h2>
+				<div class="login-wrap">
+					{{ form_row(registrationForm.username,{ 'attr': {'class': 'form-control'} }) }}
+					<br>
+					{{ form_row(registrationForm.email,{ 'attr': {'class': 'form-control'} }) }}
+					<br>
+					{{ form_row(registrationForm.password.first,{ 'attr': {'class': 'form-control'} }) }}
+                    <br>
+                    {{ form_row(registrationForm.password.second,{ 'attr': {'class': 'form-control'} }) }}
+                    <br>
+					<button class="btn btn-theme btn-block" type="submit">
+						<i class="fa fa-lock"></i>
+						SIGN IN</button>
+					<hr>
+				</div>
+			{{ form_end(registrationForm) }}
+		</div>
+	</div>
+{% endblock %}

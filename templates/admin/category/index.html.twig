@@ -1,0 +1,82 @@
+{% extends "admin/adminbase.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="row mt">
+		<div class="col-lg-3"></div>
+		<div class="col-lg-6">
+			<div class="content-panel">
+				<table class="table table-striped table-advance table-hover">
+					<button class="btn btn-success btn-md pull-right" data-toggle="modal" data-target="#myModal">
+						أضف صنف جديد
+					</button>
+					<h4>
+						<i class="fa fa-angle-right"></i>
+						Category List - لائحة الأصناف</h4>
+
+					<!-- Modal -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel">Add New CAtegory - أضف صنف جديد</h4>
+								</div>
+								<div class="modal-body">
+									{{ form_start(form) }}
+                                    <label>Name - الإسم</label>
+									{{ form_row(form.name,{ 'attr': {'class': 'form-control'} }) }}
+									
+								</div>
+								<div class="modal-footer">
+									<div class="pull-left">
+										<button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+										<button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
+									</div>
+								</div>
+                                {{ form_end(form) }}
+							</div>
+						</div>
+					</div>
+					<hr>
+					<thead>
+						<tr>
+							<th>
+								<i class="fa fa-bullhorn"></i>
+								Id - الرقم</th>
+							<th>
+								<i class="fa fa-bullhorn"></i>
+								Name - الإسم</th>
+							<th>
+								<i class=" fa fa-edit"></i>
+								Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for category in categories %}
+							<tr>
+								<td>{{ loop.index }}</td>
+								<td><a href="{{ path('product_cat', {'category': category.name}) }}">{{ category.name }}</a></td>
+								<td>
+									<!--<a href="{{ path('category_show', {'id': category.id}) }}" class="btn btn-success btn-xs">
+										<i class="fa fa-check"></i>
+									</a>-->
+									<a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-primary btn-xs">
+										<i class="fa fa-pencil"></i>
+									</a>
+									<a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-danger btn-xs" onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا ؟');">
+										<i class="fa fa-trash-o "></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<!-- /content-panel -->
+		</div>
+		<!-- /col-md-12 -->
+	</div>
+	<!-- /row -->
+{% endblock %}

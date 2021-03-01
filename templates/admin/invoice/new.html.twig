@@ -1,0 +1,254 @@
+{% extends "admin/adminbase.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" type="text/css" href="{{ asset('lib/bootstrap-datepicker/css/datepicker.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('lib/bootstrap-daterangepicker/daterangepicker.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('lib/bootstrap-timepicker/compiled/timepicker.css') }}"/>
+{% endblock %}
+
+{% block body %}
+	<!-- FORM VALIDATION -->
+	<div class="row mt">
+		<div class="col-lg-12">
+			<h4>
+				<i class="fa fa-angle-right"></i>
+				Add New Sale - اضافة عملية البيع جديدة</h4>
+			<div class="form-panel">
+				<div class=" form">
+					{{ form_start(form,{ 'attr': {'class': 'cmxform form-horizontal style-form'} }) }}
+					<div class="form-group">
+						<label for="cname" class="control-label col-lg-2">Sale Date - تاريخ البيع</label>
+						<div class="col-lg-4">
+							{{ form_row(form.invoice_date,{ 'attr': {'class': 'form-control form-control-inline input-medium default-date-picker','readonly':''} }) }}
+							<span class="input-group-btn add-on">
+								<button class="btn btn-theme" type="button">
+									<i class="fa fa-calendar"></i>
+								</button>
+							</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="cname" class="control-label col-lg-2">Invoice Note - ملاحظة</label>
+						<div class="col-lg-4">
+							{{ form_row(form.note,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<h4 class="centered">Product List - لائحة المنتوجات</h4>
+					<table id="myTable" class="table order-list">
+						<thead>
+							<tr>
+								<td>Name - اسم المنتج</td>
+								<td>Quantity - الكمية</td>
+								<td>Price - (DH) الثمن</td>
+								<td>Amount - المجموع</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="col-sm-3" >
+									<select class="form-control" name="productName[0]" id="productName-0" required >
+										<option value=""></option>
+										{% for product in products %}
+											<option value="{{ product }}">{{ product.name }}</option>
+										{% endfor %}
+									</select>
+								</td>
+								<td class="col-sm-1">
+									<input type="number" name="quantity[0]" required id="qty-0" value="1" min="1" class="form-control"/>
+								</td>
+								<td class="col-sm-3">
+									<input type="number" step="any" required name="price[0]" id="prc-0" min="1" class="form-control"/>
+								</td>
+								<td class="col-sm-3">
+									<input type="text" readonly required step="any" id="amount-0" name="amount[0]" class="form-control"/>
+									<span class="input-group-btn add-on hidden-phone">
+										<button class="btn btn-theme" type="button">
+											<i>DH</i>
+										</button>
+									</span>
+								</td>
+								<td class="col-sm-1 col-xs-1">
+									<a class="deleteRow"></a>
+									<input type="hidden" value="0" name="counter" id="ganak">
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="2" style="text-align: left;">
+								</td>
+								<td class="text-right no-border">
+									<div class="well well-small green">
+										<strong>Total - المبلغ الإجمالي</strong>
+									</div>
+								</td>
+								<td class="text-right">
+									<input type="text" class="form-control" name="gross-amount" readonly id="gross-amount">
+									<span class="input-group-btn add-on hidden-phone">
+										<button class="btn btn-theme" type="button">
+											<i>DH</i>
+										</button>
+									</span>
+								</td>
+								<td><button type="button" class="btn btn-primary" id="addRow"><i class="fa fa-plus"></i></button></td>
+							</tr>
+						</tfoot>
+					</table>
+					<div class="form-group">
+						<div class=" col-lg-10 centered">
+							<button class="btn btn-theme" type="submit">حفظ</button>
+							<a class="btn btn-theme04" href="{{ path('invoice') }}">العودة
+							</a>
+						</div>
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+			<!-- /form-panel -->
+
+		</div>
+		<!-- /col-lg-12 -->
+	</div>
+	<!-- /row -->
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script src="{{ asset('lib/jquery-ui-1.9.2.custom.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-daterangepicker/date.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-daterangepicker/moment.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('lib/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+	<script src="{{ asset('lib/advanced-form-components.js') }}"></script>
+
+	<script>
+		$(document).ready(function () {
+var cvalue = 0;
+
+$("#addRow").on("click", function () {
+cvalue = parseInt($('#ganak').val()) + 1;
+var nxt = parseInt(cvalue);
+$('#ganak').val(nxt);
+var newRow = $("<tr>");
+var cols = "";
+
+cols += '<td class="col-sm-3"><select class = "form-control" name="productName[' + cvalue + ']" id="productName-' + cvalue + '"> <option value=""> </option> {% for product in products %}<option value="{{ product }}">  {{ product.name }}</option>{% endfor %}</select></td> ';
+cols += '<td><input type="number" class="form-control" id="qty-' + cvalue + '" value="1" min="1" name="quantity[' + cvalue + ']"/></td>';
+cols += '<td><input type="number" class="form-control" step="any" id="prc-' + cvalue + '" min="1" name="price[' + cvalue + ']"/></td>';
+cols += '<td><input type="text" class="form-control" step="any" id="amount-' + cvalue + '" readonly name="amount[' + cvalue + ']"/><span class="input-group-btn add-on hidden-phone"><button class="btn btn-theme"><i>DH</i></button></span></td>';
+
+cols += '<td><button class="ibtnDel btn btn-md btn-danger"><i class="fa fa-trash"></i></button></td>';
+newRow.append(cols);
+$("table.order-list").append(newRow);
+$('#productName-' + cvalue).on('change', function () {
+
+var qty = $('#qty-' + cvalue);
+var price = $('#prc-' + cvalue);
+var amount = $('#amount-' + cvalue);
+
+
+$.ajax({
+url: '{{ path("products_ajax") }}',
+type: "POST",
+dataType: "json",
+data: {
+"name": $('#productName-' + cvalue).val()
+},
+async: true,
+success: function (data) {
+var product = JSON.parse(data);
+console.log(product[0]);
+
+price.val(product[0].buying_price);
+amount.val(qty.val() * product[0].buying_price);
+calculateGrandTotal();
+}
+});
+})
+
+$('#qty-' + cvalue).on('change', function () {
+var price = $('#prc-' + cvalue);
+var amount = $('#amount-' + cvalue);
+amount.val($(this).val() * price.val());
+calculateGrandTotal();
+})
+
+$('#prc-' + cvalue).on('change', function () {
+var amount = $('#amount-' + cvalue);
+var qty = $('#qty-' + cvalue);
+amount.val(qty.val() * $(this).val());
+calculateGrandTotal();
+})
+
+});
+
+
+$("table.order-list").on("click", ".ibtnDel", function (event) {
+$(this).closest("tr").remove();
+cvalue--;
+calculateGrandTotal();
+});
+
+$('#productName-0').on('change', function () {
+
+var qty = $('#qty-0');
+var price = $('#prc-0');
+var amount = $('#amount-0');
+
+
+$.ajax({
+url: '{{ path("products_ajax") }}',
+type: "POST",
+dataType: "json",
+data: {
+"name": $(this).val()
+},
+async: true,
+success: function (data) {
+var product = JSON.parse(data);
+console.log(data);
+price.val(product[0].buying_price);
+amount.val(qty.val() * product[0].buying_price);
+calculateGrandTotal();
+}
+});
+})
+
+$('#qty-0').on('change', function () {
+var price = $('#prc-0');
+var amount = $('#amount-0');
+amount.val($(this).val() * price.val());
+calculateGrandTotal();
+})
+
+$('#prc-0').on('change', function () {
+var amount = $('#amount-0');
+var qty = $('#qty-0');
+amount.val(qty.val() * $(this).val());
+calculateGrandTotal();
+})
+
+});
+
+
+function calculateRow(row) {
+var price = + row.find('input[name^="price"]').val();
+
+}
+
+function calculateGrandTotal() {
+var grandTotal = 0;
+$("table.order-list").find('input[name^="amount"]').each(function () {
+grandTotal += + $(this).val();
+});
+
+$("#gross-amount").val(grandTotal);
+}
+	</script>
+{% endblock %}

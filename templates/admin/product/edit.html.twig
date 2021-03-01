@@ -1,0 +1,72 @@
+{% extends "admin/adminbase.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<!-- FORM VALIDATION -->
+	<div class="row mt">
+		<div class="col-lg-12">
+			<h4>
+				<i class="fa fa-angle-right"></i>
+				Edit Product - تعديل المنتوج
+			</h4>
+			<div class="form-panel">
+				<div class=" form">
+					{{ form_start(productForm,{ 'attr': {'class': 'cmxform form-horizontal style-form'} }) }}
+					<div class="form-group ">
+						<label for="cname" class="control-label col-lg-2">Image - الصورة</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.image,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="curl" class="control-label col-lg-2">Category - الصنف</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.category,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="cname" class="control-label col-lg-2">Name - الإسم</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.name,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="cemail" class="control-label col-lg-2">Buying Price - ثمن الشراء</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.buying_price,{'type' : 'number' , 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="curl" class="control-label col-lg-2">Selling Price - ثمن البيع</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.selling_price,{'type' : 'number' , 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="curl" class="control-label col-lg-2">Quantity - الكمية</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.quantity,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group ">
+						<label for="ccomment" class="control-label col-lg-2">Description - الوصف</label>
+						<div class="col-lg-4">
+							{{ form_row(productForm.description,{ 'attr': {'class': 'form-control'} }) }}
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-offset-2 col-lg-10">
+							<button class="btn btn-theme" type="submit">حفظ</button>
+							<a class="btn btn-theme04" href="{{ path('product') }}">العودة </a>
+						</div>
+					</div>
+					{{ form_end(productForm) }}
+				</div>
+			</div>
+			<!-- /form-panel -->
+		</div>
+		<!-- /col-lg-12 -->
+	</div>
+	<!-- /row -->
+{% endblock %}

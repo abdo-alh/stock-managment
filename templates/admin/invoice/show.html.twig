@@ -1,0 +1,186 @@
+{% extends "admin/adminbase.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-lg-12 mt">
+			<div class="row content-panel">
+				<div class="col-lg-10 col-lg-offset-1">
+
+					<!--<a data-remote="false" data-type="reminder" class="btn btn-large btn-warning mb-1" title="Partial Payment">
+						<span class="fa fa-money"></span>
+						قم بالدفع
+					</a>-->
+					<!-- Modal -->
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<form method="post" action="{{ path('update-status',{ 'id' : invoice.id}) }}">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										<h4 class="modal-title" id="myModalLabel">Status - حالة الدفع</h4>
+									</div>
+									<div class="modal-body">
+										<select class="form-control" name="status" id="status">
+											<option value="Due">Due - لم تدفع</option>
+											<option value="Partial">Partial - جزئي</option>
+											<option value="Paid">Paid - خالص</option>
+										</select>
+									</div>
+									<div class="modal-footer">
+										<div class="pull-left">
+											<button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+											<button type="button" class="btn btn-default" data-dismiss="modal">إغلاق</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="btn-group">
+						<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+							<span class="fa fa-print"></span>
+							طباعة
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a target="_blank" href="{{ path('invoice_pdf',{'id':invoice.id}) }}?l=1">المعاينة</a>
+							</li>
+							<li>
+								<a href="{{ path('invoice_pdf',{'id':invoice.id}) }}?l=2">PDF طباعة</a>
+							</li>
+						</ul>
+					</div>
+
+					<a data-toggle="modal" data-target="#myModal" href="#pop_model" data-toggle="modal" data-remote="false" class="btn btn-large btn-success mb-1" title="Change Status">
+						<span class="fa fa-retweet"></span>
+						تغيير حالة الدفع</a>
+
+					<a href="#cancel-bill" class="btn btn-danger mb-1" id="cancel-bill">
+						<i class="fa fa-minus-circle"></i>
+						إلغاء
+					</a>
+
+					<div class="invoice-body">
+						<div class="pull-left">
+							<h1>ELECTRO LARBI</h1>
+							<address>
+								AHBASS MASSIRA 3<br>
+								MARRAKECH, 40140<br>
+							</address>
+						</div>
+						<!-- /pull-left -->
+						<div class="pull-right">
+							<h2>Sale Invoice - فاتورة البيع</h2>
+						</div>
+						<!-- /pull-right -->
+						<div class="clearfix"></div>
+						<br>
+						<br>
+						<br>
+						<div class="row">
+							<div class="col-md-8"></div>
+							<!-- /col-md-9 -->
+							<div class="col-md-4">
+								<br>
+								<div>
+									<div class="pull-left">
+										INVOICE NO - رقم الفاتورة :
+									</div>
+									<div class="pull-right">
+										{{ invoice.id }}
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div>
+									<!-- /col-md-3 -->
+									<div class="pull-left">
+										INVOICE DATE - تاريخ البيع :
+									</div>
+									<div class="pull-right">
+										{{ invoice.invoiceDate|date('d/m/Y') }}
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div>
+									<!-- /col-md-3 -->
+									<div class="pull-left">
+										STATUS - حالة الدفع :
+									</div>
+									<div class="pull-right">
+										{% if invoice.status == "Due" %}
+											<label class="label label-danger">{{ invoice.status }}
+												- لم تدفع</label>
+										{% elseif invoice.status == "Partial" %}
+											<label class="label label-primary">{{ invoice.status }}
+												- جزئي</label>
+										{% else %}
+											<label class="label label-success">{{ invoice.status }}
+												- خالص</label>
+										{% endif %}
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<!-- /row -->
+								<br>
+								<div class="well well-small green">
+									<div class="pull-left">
+										Total Due - المبلغ الإجمالي :
+									</div>
+									<div class="pull-right">
+										{{ invoice.amount|number_format(0,',') }}
+										DH
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<!-- /invoice-body -->
+						</div>
+						<!-- /col-lg-10 -->
+						<table class="table">
+							<thead>
+								<tr>
+									<th class="text-left">Name - اسم المنتج</th>
+									<th style="width:140px" class="text-center">QTY -  الكمية</th>
+									<th style="width:190px" class="text-right">UNIT PRICE - الثمن</th>
+									<th style="width:150px" class="text-right">TOTAL - المجموع</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for detail in invoice.invoiceDetails %}
+									<tr>
+										<td>{{ detail.productName }}</td>
+										<td class="text-center">{{ detail.quantity }}
+										</td>
+										<td class="text-right">{{ detail.price|number_format(0,',') }}
+											DH</td>
+										<td class="text-right">{{ detail.amount|number_format(0,',') }}
+											DH</td>
+									</tr>
+								{% endfor %}
+								<tr>
+									<td colspan="2" rowspan="4"></td>
+									<td class="text-right no-border">
+										<div class="well well-small green">
+											<strong>Total - المبلغ الإجمالي</strong>
+										</div>
+									</td>
+									<td class="text-right">
+										<strong>{{ invoice.amount|number_format(0,',') }}
+											DH</strong>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/col-lg-12 mt -->
+	</div>
+{% endblock %}

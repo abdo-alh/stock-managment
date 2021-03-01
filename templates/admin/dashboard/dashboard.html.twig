@@ -1,0 +1,328 @@
+{% extends "admin/adminbase.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-lg-9 main-chart">
+			<div
+				class="row mt">
+				<!-- SERVER STATUS PANELS -->
+				<div class="col-md-4 col-sm-4 mb">
+					<div class="grey-panel pn donut-chart">
+						<div class="grey-header">
+							<h4>TODAY SALES - مبيعات اليوم</h4>
+						</div>
+						<div class="row">
+							<div class="col-sm-6 col-xs-6 goleft">
+								<p>TODAY SALES - مبيعات اليوم</p>
+							</div>
+							<div class="col-sm-6 col-xs-6">
+								<h2>{{ today_invoices }}</h2>
+							</div>
+						</div>
+					</div>
+					<!-- /grey-panel -->
+				</div>
+				<!-- /col-md-4-->
+				<div class="col-md-4 col-sm-4 mb">
+					<div class="darkblue-panel pn">
+						<div class="darkblue-header">
+							<h5>MONTH SALES - مبيعات هذا الشهر</h5>
+						</div>
+						<footer>
+							<div class="centered">
+								<h2>
+									<i class="fa fa-hdd-o"></i>
+									{{ month_invoices }}</h2>
+							</div>
+						</footer>
+					</div>
+					<!--  /darkblue panel -->
+				</div>
+				<!-- /col-md-4 -->
+				<div
+					class="col-md-4 col-sm-4 mb">
+					<!-- REVENUE PANEL -->
+					<div class="green-panel pn">
+						<div class="green-header">
+							<h5>MONTH REVENUE - مداخيل هذا الشهر</h5>
+						</div>
+						<h3 class="mt">
+							{{ month_revenu|number_format(0, '.') }}
+							DH</h3>
+					</div>
+				</div>
+				<!-- /col-md-4 -->
+			</div>
+			<!-- /row -->
+			<div
+				class="row mt">
+				<!-- SERVER STATUS PANELS -->
+				<div class="col-md-4 col-sm-4 mb">
+					<div class="grey-panel pn donut-chart">
+						<div class="grey-header">
+							<a href="{{ path('product_cat',{ 'category' : 'Portable' }) }}">
+								<h5>PORTABLES - الهواتف</h5>
+							</a>
+						</div>
+						<a href="{{ path('product_cat',{ 'category' : 'Portable' }) }}">
+							<i class="glyphicon glyphicon-phone"></i>
+						</a>
+					</div>
+					<!-- /grey-panel -->
+				</div>
+				<!-- /col-md-4-->
+				<div class="col-md-4 col-sm-4 mb">
+					<div class="darkblue-panel pn">
+						<div class="darkblue-header">
+							<a href="{{ path('product_cat',{ 'category' : 'ACCESSOIRES' }) }}">
+								<h5>ACCESSOIRES - اكسسوارات</h5>
+							</a>
+						</div>
+						<a href="{{ path('product_cat',{ 'category' : 'ACCESSOIRES' }) }}">
+							<i class="glyphicon glyphicon-headphones"></i>
+						</a>
+					</div>
+					<!--  /darkblue panel -->
+				</div>
+				<!-- /col-md-4 -->
+				<div
+					class="col-md-4 col-sm-4 mb">
+					<!-- REVENUE PANEL -->
+					<div class="green-panel pn">
+						<div class="green-header">
+							<a href="{{ path('product_cat',{ 'category' : 'TELECOMMANDE' }) }}">
+								<h5>TELECOMMANDES - جهاز التحكم</h5>
+							</a>
+							<a href="{{ path('product_cat',{ 'category' : 'TELECOMMANDE' }) }}"><img src="{{ asset('img/remote-control.png') }}" alt="" width="110"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt">
+				<div class="col-md-12">
+					<div class="content-panel">
+						<table class="table table-striped table-advance table-hover">
+							<h4>
+								<i class="fa fa-angle-right"></i>Sales Invoices - فواتير البيع</h4>
+							<hr>
+							<thead>
+								<tr>
+									<th>
+										<i class="fa fa-bullhorn"></i>
+										No Invoice - رقم الفاتورة</th>
+									<th>
+										<i class="fa fa-bullhorn"></i>
+										Date - تاريخ الفاتورة</th>
+									<th>
+										<i class="fa fa-question-circle"></i>
+										Amount - المبلغ</th>
+									<th>
+										<i class=" fa fa-edit"></i>
+										Status - الحالة</th>
+									<th>
+										<i class=" fa fa-edit"></i>
+										Settings - إعدادات</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for invoice in invoices %}
+									<tr>
+										<td>{{ invoice.id }}</td>
+										<td>{{ invoice.invoiceDate|date("d/m/Y") }}</td>
+										<td>{{ invoice.amount|number_format(0,',') }}
+											DH
+										</td>
+										<td>
+											{% if invoice.status == "Due" %}
+												<label class="label label-danger">{{ invoice.status }}</label>
+											{% elseif invoice.status == "Partial" %}
+												<label class="label label-primary">{{ invoice.status }}</label>
+											{% else %}
+												<label class="label label-success">{{ invoice.status }}</label>
+											{% endif %}
+										</td>
+										<td>
+											<a href="{{ path('invoice_show', {'id': invoice.id}) }}" class="btn btn-success btn-xs">
+												<i class="fa fa-check"></i>
+											</a>
+											<a href="{{ path('invoice_delete', {'id': invoice.id}) }}" class="btn btn-danger btn-xs" onclick="return confirm('هل أنت متأكد أنك تريد حذف هذا ؟');">
+												<i class="fa fa-trash-o "></i>
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<!-- /content-panel -->
+				</div>
+				<!-- /col-md-12 -->
+
+			</div>
+			<!-- /row -->
+			<div class="row mt"></div>
+			<!-- /row -->
+			<!--<div class="row mt">
+										<div
+											class="col-md-9 col-sm-9">
+											<div class="card" style="padding:10px;height:450px">
+												<div class="card-header">
+													<h4 class="centered">EXPENSES - المصاريف</h4>
+												</div>
+												<hr>
+												<div class="card-body">
+													<div class="col-md-6 col-sm-4">
+														<label class="text-success">TODAY EXPENSES</label>
+														<h4>22 000 DH</h4>
+														<div class="progress progress-striped" style="height:10px">
+															<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+																<span class="sr-only">40% Complete (success)</span>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-4">
+														<label class="text-success">TODAY EXPENSES</label>
+														<h4>22 000 DH</h4>
+														<div class="progress progress-striped" style="height:10px">
+															<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+																<span class="sr-only">20% Complete</span>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-4">
+														<label class="text-success">TODAY EXPENSES</label>
+														<h4>22 000 DH</h4>
+														<div class="progress progress-striped" style="height:10px">
+															<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+																<span class="sr-only">60% Complete (warning)</span>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-4 mb">
+														<label class="text-success">TODAY EXPENSES</label>
+														<h4>22 000 DH</h4>
+														<div class="progress progress-striped" style="height:10px">
+															<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+																<span class="sr-only">80% Complete (danger)</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>-->
+		</div>
+		<!-- /col-lg-3 -->
+		<div
+			class="col-lg-3 ds">
+			<!-- CALENDAR-->
+			<div id="calendar" class="mt">
+				<div class="panel green-panel no-margin">
+					<div class="panel-body">
+						<div id="date-popover" class="popover top" style="cursor: pointer; disadding: block; margin-left: 33%; margin-top: -50px; width: 175px;">
+							<div class="arrow"></div>
+							<h3 class="popover-title" style="disadding: none;"></h3>
+							<div id="date-popover-content" class="popover-content"></div>
+						</div>
+						<div id="my-calendar"></div>
+					</div>
+				</div>
+			</div><br>
+			<!-- / calendar -->
+			<div class="content-panel">
+				<table class="table table-striped table-advance table-hover">
+					<h4>
+						<i class="fa fa-angle-right"></i>STOCK ALERT - المنتجات المقتربة من النفاذ </h4>
+					<hr>
+					<tbody>
+						{% for product in products_out_stock %}
+							<tr>
+								<td style="text-align:center;">
+									<span class="label label-danger label-mini">{{ product.quantity }}</span>
+								</td>
+								<td>
+									<a href="{{ path('product_edit',{'id':product.id}) }}" style="color:black">{{ product.name }}</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div><br>
+			<div class="content-panel">
+				<table class="table table-striped table-advance table-hover">
+					<h4>
+						<i class="fa fa-angle-right"></i>Most Products Sales - المنتجات الأكثر مبيعا</h4>
+					<hr>
+					<thead>
+						<tr>
+							<th>
+								<i class="fa fa-bullhorn"></i>
+								Name - الإسم</th>
+							<th>
+								<i class="fa fa-bookmark"></i>
+								Quantity - الكمية</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for product in most_products %}
+							<tr>
+								<td>{{ product.productName }}</td>
+								<td style="text-align:center">
+									<label class="label label-info">{{ product.TotalQuantity }}</label>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div><br>
+			<!-- /content-panel -->
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="application/javascript">
+		$(document).ready(function () {
+$("#date-popover").popover({html: true, trigger: "manual"});
+$("#date-popover").click(function (e) {
+$(this).hide();
+});
+
+$("#my-calendar").zabuto_calendar({
+language: "fr",
+action: function () {
+return myDateFunction(this.id, false);
+},
+action_nav: function () {
+return myNavFunction(this.id);
+},
+legend: [
+{
+type: "text",
+label: "Special event",
+badge: "00"
+}, {
+type: "block",
+label: "Regular event"
+}
+]
+});
+});
+
+function myDateFunction(id) {
+var date = $("#" + id).data("date");
+var hasEvent = $("#" + id).data("hasEvent");
+console.log(date, hasEvent);
+}
+
+function myNavFunction(id) {
+var nav = $("#" + id).data("navigation");
+var to = $("#" + id).data("to");
+console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
+}
+	</script>
+
+{% endblock %}
